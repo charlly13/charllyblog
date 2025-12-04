@@ -3,18 +3,21 @@ id: network-traffic-analysis
 title: Network Traffic Analysis (NTA)
 ---
 
+
 # Network Traffic Analysis (NTA)
 
 Network Traffic Analysis is the practice of capturing, inspecting, and analyzing data flow across a network to provide crucial visibility into real-time network activity.
+
 
 ## Fundamentals and Purpose
 
 **Definition:** The practice of capturing, inspecting, and analyzing data flow across a network. Provides crucial visibility into real-time network activity.
 
 **Key Goals:**
-- **Baseline Establishment:** Defining "normal" traffic patterns to quickly identify anomalies.
-- **Threat Hunting:** Detecting command-and-control (C2) communication, malware, or data exfiltration.
-- **Diagnosis:** Troubleshooting latency, failures, and protocol errors.
+* **Baseline Establishment:** Defining "normal" traffic patterns to quickly identify anomalies.
+* **Threat Hunting:** Detecting command-and-control (C2) communication, malware, or data exfiltration.
+* **Diagnosis:** Troubleshooting latency, failures, and protocol errors.
+
 
 ## The OSI Model: Conceptual Framework
 
@@ -30,12 +33,13 @@ The Open Systems Interconnection (OSI) model divides network communication into 
 | **2** | **Data Link** | Provides physical addressing (MAC) and controls access to the shared media. | Ethernet, Switches | Frame |
 | **1** | **Physical** | Transmits raw binary bits over the physical medium (cables, wireless). | Network Cards, Cabling | Bit |
 
+
 ## Analysis Tools and Techniques
 
 **Wireshark:** The standard, open-source tool for deep packet inspection.
 
 **Filtering:**
-- **Capture Filters:** Applied **before** capture to reduce file size (e.g., `host 192.168.1.1`).
-- **Display Filters:** Applied **after** capture to selectively view captured data (e.g., `http.request`).
+* **Capture Filters:** Applied **before** capture to reduce file size (e.g., `host 192.168.1.1`).
+* **Display Filters:** Applied **after** capture to selectively view captured data (e.g., `http.request`).
 
 **TCP Stream Following:** Allows analysts to reassemble the entire conversation (e.g., a file transfer or web session) from fragmented packets into a single, readable stream.
