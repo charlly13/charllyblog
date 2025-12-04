@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { marked } from 'marked';
 
 export default function LearningPage({ params }: { params: { id: string } }) {
   const learning = learningsData.find((item) => item.id === params.id);
@@ -29,7 +30,9 @@ export default function LearningPage({ params }: { params: { id: string } }) {
               {learning.title}
             </h1>
             <div className="prose prose-lg max-w-none text-foreground/80">
-              <p>{learning.content}</p>
+              <div
+                dangerouslySetInnerHTML={{ __html: marked.parse(learning.content) }}
+              />
             </div>
           </div>
         </div>
