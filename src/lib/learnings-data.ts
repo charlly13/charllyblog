@@ -35,13 +35,14 @@ function loadMarkdownLearnings(): Learning[] {
 
     return fs
       .readdirSync(dir)
-      .filter((f) => f.endsWith('.md'))
+      .filter((f) => f.endsWith('.md') || f.endsWith('.html'))
       .map((filename) => {
         const full = path.join(dir, filename);
         const raw = fs.readFileSync(full, 'utf8');
 
         let content = raw;
         const meta: Record<string, string> = {};
+        const isHtml = filename.endsWith('.html');
 
         if (raw.startsWith('---')) {
           const end = raw.indexOf('\n---', 3);
@@ -59,8 +60,8 @@ function loadMarkdownLearnings(): Learning[] {
           }
         }
 
-        const id = meta['id'] || filename.replace(/\.md$/, '');
-        const title = meta['title'] || filename.replace(/\.md$/, '').replace(/-/g, ' ');
+        const id = meta['id'] || filename.replace(/\.(md|html)$/, '');
+        const title = meta['title'] || filename.replace(/\.(md|html)$/, '').replace(/-/g, ' ');
 
         return { id, title, content } as Learning;
       });

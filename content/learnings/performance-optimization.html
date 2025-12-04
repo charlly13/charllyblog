@@ -1,0 +1,63 @@
+---
+id: performance-optimization
+title: Performance Optimization for React Apps
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<p>Performance is critical for user experience. In this topic I cover techniques like code-splitting, lazy loading, memoization with <code>React.memo</code> and <code>useMemo</code>, minimizing re-renders, and using the profiler to identify bottlenecks. I also include notes on image optimization and HTTP caching strategies.</p>
+<p>Key takeaways:</p>
+<ul>
+<li>Use <code>React.memo</code> for pure functional components.</li>
+<li>Prefer data virtualization for long lists.</li>
+<li>Monitor with Lighthouse and React Profiler.</li>
+</ul>

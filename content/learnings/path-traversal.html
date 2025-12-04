@@ -1,0 +1,166 @@
+---
+id: path-traversal
+title: Path Traversal (CWE-35)
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>Path Traversal (CWE-35): A Detailed Guide</h1>
+<p>This guide explains Path Traversal (also known as Directory Traversal), a security vulnerability that allows an attacker to read files on a server that they should not be able to access. We will break down how it works, why it&#39;s dangerous, and the essential methods for preventing it.</p>
+<h2>1. What is Path Traversal?</h2>
+<p><strong>The Core Idea:</strong> A Path Traversal attack tricks a web application into accessing files and directories located outside of the web server&#39;s root directory.</p>
+<p>Normally, a web server should only provide files from a specific folder (often called the &quot;web root&quot; or <code>www</code>). This vulnerability allows an attacker to &quot;traverse&quot; up the file system hierarchy and access sensitive files anywhere on the server.</p>
+<p><strong>An Analogy (The Library):</strong></p>
+<ul>
+<li><p><strong>The Web Root:</strong> Imagine a library where you are only allowed to access books in the &quot;Public Reading&quot; section.</p>
+</li>
+<li><p><strong>A Normal Request:</strong> You ask the librarian for a specific book by its title, and they bring it to you from the Public Reading section.</p>
+</li>
+<li><p><strong>A Path Traversal Attack:</strong> Instead of a title, you give the librarian a set of instructions like, &quot;Go back to the main hallway, turn left into the restricted &#39;Staff Only&#39; area, and get me the employee records file.&quot; If the librarian follows these instructions without question, they have been successfully attacked.</p>
+</li>
+</ul>
+<h2>2. How Does It Work? The File System Tree</h2>
+<p>To understand this attack, you need to know how file systems are organized. They use a tree-like structure, with directories (folders) inside other directories.</p>
+<ul>
+<li><p><strong>File System Navigation:</strong> We use special symbols to move around this tree.</p>
+<ul>
+<li><code>/</code> (a forward slash) refers to the <strong>root</strong> directory (the very top level of the file system).</li>
+<li><code>.</code> (a single dot) refers to the <strong>current</strong> directory (where we are right now).</li>
+<li><code>..</code> (a double dot) refers to the <strong>parent</strong> directory (one level up).</li>
+</ul>
+</li>
+<li><p><strong>The Attack:</strong> Path Traversal attacks exploit the <code>..</code> sequence. By repeatedly using <code>..</code>, an attacker can move up from the web root directory to access the rest of the file system.</p>
+<ul>
+<li>On <strong>Linux</strong> systems, this is done with <code>../</code>.</li>
+<li>On <strong>Windows</strong> systems, this is done with <code>..\</code>.</li>
+</ul>
+</li>
+</ul>
+<h2>3. Other Names for This Attack</h2>
+<p>This vulnerability is known by several names, all referring to the same core problem:</p>
+<ul>
+<li><p>Directory Traversal</p>
+</li>
+<li><p>Dot-Dot-Slash (<code>../</code>)</p>
+</li>
+<li><p>Directory Climbing</p>
+</li>
+<li><p>Backtracking</p>
+</li>
+</ul>
+<h2>4. Example Attack Scenario</h2>
+<p>Let&#39;s look at how an application uses file parameters and how an attacker can exploit them.</p>
+<p><strong>A Normal, Legitimate Request:</strong> A user wants to view their report, so the application requests a file. The URL looks like this: <code>http://some_site.com/get-files.jsp?file=report.pdf</code> The application is designed to find <code>report.pdf</code> inside the public web directory and show it to the user.</p>
+<p><strong>A Malicious Path Traversal Request:</strong> An attacker wants to read the system&#39;s password file, which is highly sensitive and stored outside the web directory. They craft a special URL: <code>http://some_site.com/get-files.jsp?file=../../../../etc/passwd</code></p>
+<p><strong>Breaking Down the Attack:</strong></p>
+<ul>
+<li><p><code>../../../../</code>: Each <code>../</code> tells the server to go up one directory. The attacker uses enough of these to &quot;climb&quot; out of the web root directory and reach the server&#39;s root (<code>/</code>) directory.</p>
+</li>
+<li><p><code>etc/passwd</code>: Once at the root directory, the attacker provides the path to the sensitive file they want to access.</p>
+</li>
+<li><p><strong>The Result:</strong> If the application is vulnerable, it will process this path and return the contents of the <code>/etc/passwd</code> file, which contains a list of all users on the system.</p>
+</li>
+</ul>
+<p><strong>Note on Operating Systems:</strong> The following distinction is important:</p>
+<ul>
+<li><p>On a <strong>Linux</strong> server, an attacker can potentially navigate the entire disk.</p>
+</li>
+<li><p>On a <strong>Windows</strong> server, an attacker is often restricted to navigating within the single partition where the web root is located (e.g., they can&#39;t jump from the <code>C:\</code> drive to the <code>D:\</code> drive).</p>
+</li>
+</ul>
+<h2>5. Common Attack Vectors</h2>
+<p>Attackers can inject the Path Traversal payload in several parts of an HTTP request:</p>
+<ol>
+<li><p><strong>HTTP GET Request:</strong> The malicious string is placed directly in the URL&#39;s query parameters, as seen in the example above. This is the most common method.</p>
+</li>
+<li><p><strong>HTTP POST Request:</strong> The payload is sent in the body of the request, often from a form submission. This is less visible than a GET request.</p>
+</li>
+<li><p><strong>Cookies:</strong> An attacker can modify a cookie value in their browser to contain the traversal sequence. When the server reads the cookie, it might use that value to build a file path, triggering the vulnerability.</p>
+</li>
+</ol>
+<h2>6. Where is This Vulnerability Found?</h2>
+<p>Path Traversal is not specific to one language. It can be found in any language where the application code takes user-controllable input and uses it to access files, including:</p>
+<ul>
+<li><p>PHP</p>
+</li>
+<li><p>Java / JSP</p>
+</li>
+<li><p>.NET / ASP</p>
+</li>
+<li><p>Python</p>
+</li>
+<li><p>Perl</p>
+</li>
+</ul>
+<h2>7. How to Prevent Path Traversal</h2>
+<p>The most effective defenses include:</p>
+<ul>
+<li><p><strong>Input Validation:</strong> Reject any input containing <code>..</code> or path separators. Use a whitelist of allowed filenames.</p>
+</li>
+<li><p><strong>Path Canonicalization:</strong> Convert the path to its absolute, canonical form and verify it&#39;s within the allowed directory.</p>
+</li>
+<li><p><strong>Sandboxing:</strong> Restrict file access to a specific directory using chroot or similar OS mechanisms.</p>
+</li>
+<li><p><strong>Use Safe APIs:</strong> Use framework functions designed for secure file serving rather than building paths manually.</p>
+</li>
+<li><p><strong>Principle of Least Privilege:</strong> Ensure the web application user has minimal file system permissions.</p>
+</li>
+</ul>
+<h2>8. Testing for Path Traversal</h2>
+<ul>
+<li><p><strong>Manual Testing:</strong> Try common payloads like <code>../</code>, <code>..\\</code>, <code>....//</code>, etc.</p>
+</li>
+<li><p><strong>Automated Tools:</strong> Burp Suite Scanner and OWASP ZAP can detect these vulnerabilities.</p>
+</li>
+<li><p><strong>Metasploit:</strong> A penetration testing framework with modules for exploiting this vulnerability.</p>
+</li>
+</ul>

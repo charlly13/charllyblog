@@ -1,0 +1,132 @@
+---
+id: burp-suite-introduction
+title: Getting Started with Burp Suite
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>Getting Started with Burp Suite: A Detailed Guide</h1>
+<p>This guide provides a beginner-friendly introduction to Burp Suite, the all-in-one toolkit for web application security testing. We will cover what it is, its core tools, how to set it up, and how to use it responsibly.</p>
+<h2>1. What is Burp Suite?</h2>
+<p><strong>The Core Idea:</strong> Burp Suite is an integrated platform designed for security professionals and bug bounty hunters to test the security of web applications. Think of it as a powerful <strong>magnifying glass and toolkit</strong> that sits between your web browser and the internet, allowing you to inspect, modify, and analyze all the traffic that goes back and forth.</p>
+<p>Its primary purpose is to help you find vulnerabilities in web applications before malicious hackers do.</p>
+<h2>2. The Core Components of Burp Suite</h2>
+<p>Burp Suite is made up of several powerful tools that work together. Here are the most important ones for beginners:</p>
+<h3>a. Proxy</h3>
+<ul>
+<li><p><strong>What it is:</strong> The Proxy is the heart of Burp Suite. It acts as a &quot;man-in-the-middle,&quot; intercepting all the communication between your browser and the web server.</p>
+</li>
+<li><p><strong>What it does:</strong> It allows you to see the raw HTTP/S requests your browser sends (e.g., when you log in or click a link) and the raw HTTP/S responses the server sends back. You can pause, view, and even modify this traffic before it reaches its destination.</p>
+</li>
+<li><p><strong>Why it&#39;s useful:</strong> This is essential for understanding how a web application works and for finding vulnerabilities by changing the data being sent.</p>
+</li>
+</ul>
+<h3>b. Repeater</h3>
+<ul>
+<li><p><strong>What it is:</strong> A tool for manually manipulating and re-sending individual HTTP requests over and over again.</p>
+</li>
+<li><p><strong>What it does:</strong> You can take any request you captured in the Proxy, send it to Repeater, change parts of it (like a user ID in the URL or a form field), and send it again to see how the server&#39;s response changes.</p>
+</li>
+<li><p><strong>Why it&#39;s useful:</strong> It&#39;s perfect for detailed, manual testing of a specific vulnerability. For example, you can use it to test for SQL injection by trying different malicious inputs in a parameter.</p>
+</li>
+</ul>
+<h3>c. Intruder</h3>
+<ul>
+<li><p><strong>What it is:</strong> A tool for automating customized attacks against a web application.</p>
+</li>
+<li><p><strong>What it does:</strong> Intruder is a powerful and highly configurable tool. You can select parts of a request to be your &quot;payload positions&quot; and then provide Intruder with a list of payloads (e.g., a list of common passwords, usernames, or XSS attack strings). Intruder will then send a request for every single payload, allowing you to quickly test for many vulnerabilities.</p>
+</li>
+<li><p><strong>Why it&#39;s useful:</strong> It automates repetitive tasks like brute-force attacks or fuzzing for input validation flaws.</p>
+</li>
+</ul>
+<h3>d. Scanner</h3>
+<ul>
+<li><p><strong>What it is:</strong> An automated tool that scans a web application for a wide range of common security vulnerabilities.</p>
+</li>
+<li><p><strong>What it does:</strong> The Scanner automatically crawls through a website, analyzes the traffic, and identifies potential security flaws like SQL injection, XSS, and path traversal. It presents its findings in a clear report.</p>
+</li>
+<li><p><strong>Why it&#39;s useful:</strong> It provides a quick way to find &quot;low-hanging fruit&quot; vulnerabilities, though it should always be supplemented with manual testing.</p>
+</li>
+</ul>
+<h3>e. Other Tools</h3>
+<ul>
+<li><p><strong>Sequencer:</strong> Used to analyze the randomness of session tokens and other data that is supposed to be unpredictable.</p>
+</li>
+<li><p><strong>Decoder:</strong> A utility for converting data between different formats (e.g., URL encoding, Base64, Hex).</p>
+</li>
+<li><p><strong>Comparer:</strong> A tool to visually compare two pieces of data (like two different server responses) to see the differences.</p>
+</li>
+</ul>
+<h2>3. How to Set Up Burp Suite</h2>
+<p>Getting started involves three main steps:</p>
+<ol>
+<li><p><strong>Download &amp; Install:</strong> Get the appropriate version of Burp Suite (Community Edition is free) from the official PortSwigger website and install it on your computer.</p>
+</li>
+<li><p><strong>Configure Your Browser:</strong> You need to tell your web browser (like Firefox or Chrome) to send all its traffic to the Burp Suite Proxy instead of directly to the internet. This is typically done by changing the proxy settings in your browser to point to <code>127.0.0.1</code> on port <code>8080</code>.</p>
+</li>
+<li><p><strong>Install Burp&#39;s CA Certificate:</strong> Modern websites use HTTPS (encrypted traffic). For Burp to act as a man-in-the-middle for this traffic, it needs to decrypt it, view it, and then re-encrypt it. Your browser will not trust Burp&#39;s re-encrypted traffic by default. You must install Burp&#39;s unique Certificate Authority (CA) certificate into your browser&#39;s trusted certificate store. This tells your browser to trust the traffic coming from Burp Suite.</p>
+</li>
+</ol>
+<h2>4. A Typical Web Security Testing Workflow</h2>
+<p>A standard testing process using Burp Suite looks like this:</p>
+<ol>
+<li><p><strong>Map the Application:</strong> Use your browser, configured with the Burp Proxy, to click through every part of the web application. Log in, view pages, submit forms, etc. Burp will passively build a complete &quot;site map&quot; of the application, showing you all the pages and resources it uses.</p>
+</li>
+<li><p><strong>Analyze Traffic:</strong> Review the captured requests and responses to understand how the application works, what parameters are being sent, and where potential vulnerabilities might exist.</p>
+</li>
+<li><p><strong>Test for Vulnerabilities:</strong> Use the Repeater and Intruder tools to manually test inputs for common vulnerabilities like SQL injection, XSS, authentication bypasses, etc.</p>
+</li>
+<li><p><strong>Document Findings:</strong> Keep detailed notes of what you found, including the exact steps to reproduce each vulnerability, its impact, and how to fix it.</p>
+</li>
+<li><p><strong>Report:</strong> Present your findings to the organization in a clear, actionable report.</p>
+</li>
+</ol>

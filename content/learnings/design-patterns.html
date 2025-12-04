@@ -1,0 +1,63 @@
+---
+id: design-patterns
+title: Design Patterns for Scalable Systems
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<p>This topic explores common design patterns used to build scalable and maintainable systems: event-driven architectures, CQRS, saga patterns, and caching strategies. Examples include how to model eventual consistency and when to apply each pattern.</p>
+<p>Highlights:</p>
+<ul>
+<li>Choose patterns based on trade-offs, not preference.</li>
+<li>Prefer simplicity; introduce complexity only when needed.</li>
+<li>Use observability to validate pattern decisions in production.</li>
+</ul>

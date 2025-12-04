@@ -14,6 +14,9 @@ export default function LearningPage({ params }: { params: { id: string } }) {
     notFound();
   }
 
+  // Detect if content is HTML (starts with < or contains HTML tags)
+  const isHtml = learning.content.trim().startsWith('<') || /<[^>]+>/.test(learning.content);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -30,9 +33,16 @@ export default function LearningPage({ params }: { params: { id: string } }) {
               {learning.title}
             </h1>
             <div className="prose prose-lg max-w-none text-foreground/80">
-              <div
-                dangerouslySetInnerHTML={{ __html: marked.parse(learning.content) }}
-              />
+              {isHtml ? (
+                <div
+                  className="learning-html-content"
+                  dangerouslySetInnerHTML={{ __html: learning.content }}
+                />
+              ) : (
+                <div
+                  dangerouslySetInnerHTML={{ __html: marked.parse(learning.content) }}
+                />
+              )}
             </div>
           </div>
         </div>

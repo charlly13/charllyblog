@@ -1,0 +1,147 @@
+---
+id: sql-injection
+title: SQL Injection (CWE-89)
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>SQL Injection (CWE-89): A Detailed Guide</h1>
+<p>This guide breaks down SQL Injection (SQLi), one of the most common and destructive web application vulnerabilities. We will explore what it is, the different ways it can be exploited, and the most effective methods to prevent it.</p>
+<h2>1. First, What is SQL?</h2>
+<p>Before diving into the attack, it&#39;s important to understand what SQL is.</p>
+<ul>
+<li><p><strong>What it stands for:</strong> <strong>S</strong>tructured <strong>Q</strong>uery <strong>L</strong>anguage.</p>
+</li>
+<li><p><strong>What it is:</strong> SQL is the standard programming language used to communicate with and manage data in a <strong>relational database</strong>. Think of a database as a massive collection of organized spreadsheets (tables), and SQL is the language you use to ask it questions or give it commands.</p>
+</li>
+<li><p><strong>Common Uses:</strong></p>
+<ul>
+<li><strong>Read data:</strong> <code>SELECT</code> information from a table.</li>
+<li><strong>Add data:</strong> <code>INSERT</code> new records into a table.</li>
+<li><strong>Update data:</strong> <code>UPDATE</code> an existing record.</li>
+<li><strong>Delete data:</strong> <code>DELETE</code> an old record.</li>
+</ul>
+</li>
+</ul>
+<h2>2. What is SQL Injection (SQLi)?</h2>
+<p><strong>The Core Idea:</strong> An SQL Injection is an attack where a hacker inserts (or &quot;injects&quot;) their own malicious SQL commands into a web application&#39;s query.</p>
+<p>This happens when the application takes input from a user (e.g., from a login form, search bar, or URL) and directly includes it in a database query without properly sanitizing it first. The attacker&#39;s goal is to manipulate the original query to make the database do something it wasn&#39;t supposed to do.</p>
+<p><strong>A Simple Analogy (The Login Form):</strong></p>
+<ol>
+<li><p><strong>The Application&#39;s Intended Query:</strong> A website has a login page. When you enter your username, the server builds a query like this: <code>SELECT * FROM users WHERE username = &#39;YOUR_USERNAME&#39;;</code></p>
+</li>
+<li><p><strong>The Attacker&#39;s Input:</strong> Instead of a normal username, the attacker enters: <code>&#39; OR &#39;1&#39;=&#39;1&#39; --</code></p>
+</li>
+<li><p><strong>The Vulnerability:</strong> The application blindly trusts this input and builds the following malicious query: <code>SELECT * FROM users WHERE username = &#39;&#39; OR &#39;1&#39;=&#39;1&#39; --&#39;;</code></p>
+</li>
+<li><p><strong>The Result:</strong> Let&#39;s break down what the database sees:</p>
+<ul>
+<li><code>username = &#39;&#39;</code> — This is false (the username field is empty).</li>
+<li><code>OR &#39;1&#39;=&#39;1&#39;</code> — This is always true (1 always equals 1).</li>
+<li><code>--</code> — This is a comment, which means everything after it is ignored, including the closing quote and semicolon.</li>
+<li>Because the <code>WHERE</code> clause is now true for every user, the database returns all users, and the attacker is logged in, often as the first user in the database (usually an admin).</li>
+</ul>
+</li>
+</ol>
+<h2>3. Why is SQLi So Dangerous?</h2>
+<p>A successful SQLi attack is not a minor bug; it can be catastrophic for a business and its users. The potential consequences include:</p>
+<ul>
+<li><p><strong>Data Breach:</strong> Attackers can read sensitive data from the database, including user credentials, personal information, credit card numbers, and trade secrets.</p>
+</li>
+<li><p><strong>Data Loss or Corruption:</strong> Attackers can use commands like <code>UPDATE</code> or <code>DELETE</code> to modify or destroy data, crippling the application.</p>
+</li>
+<li><p><strong>Unauthorized Access:</strong> As shown in the login example, attackers can bypass authentication controls to impersonate users or gain administrative privileges.</p>
+</li>
+<li><p><strong>Full System Compromise:</strong> In some cases, attackers can escalate their privileges from the database to the underlying operating system, allowing them to execute OS commands and take complete control of the server.</p>
+</li>
+</ul>
+<h2>4. How Does it Work? Breaking the Code vs. Data Barrier</h2>
+<p>The fundamental problem behind SQLi is that the application <strong>mixes code (the SQL query) and data (the user input) together</strong>. When an attacker provides specially crafted input, a vulnerable application can&#39;t distinguish between the intended command and the attacker&#39;s malicious command. The database sees the entire string as one single command to be executed.</p>
+<h2>5. The Main Variants of SQLi Attacks</h2>
+<p>Attackers use different techniques depending on how the application behaves.</p>
+<h3>a. In-band (Classic) SQLi</h3>
+<p>This is the most direct type, where the attacker uses the same channel to launch the attack and see the results.</p>
+<ul>
+<li><p><strong>Error-Based:</strong> The attacker submits malicious input designed to make the database produce an error message. These error messages can often contain valuable information about the database&#39;s structure, table names, and column names.</p>
+</li>
+<li><p><strong>Union-Based:</strong> The attacker uses the <code>UNION</code> SQL operator to combine the results of the original, legitimate query with the results of a malicious query they control. This allows them to extract data from other tables in the database and have it displayed on the page.</p>
+</li>
+</ul>
+<h3>b. Out-of-band SQLi</h3>
+<p>This technique is used when the application doesn&#39;t return the results of the query on the webpage. The attacker injects a command that forces the database to make a network connection to an external server the attacker controls (e.g., an HTTP request or a DNS lookup). This confirms the vulnerability is present and can be used to slowly exfiltrate data.</p>
+<h3>c. Inferential (Blind) SQLi</h3>
+<p>In this type, the application doesn&#39;t display the results directly, and there are no error messages. The attacker has to infer whether their attack worked based on subtle differences in the application&#39;s response (like page load time or slight changes in content).</p>
+<h2>6. How to Prevent SQL Injection</h2>
+<p>The most effective defenses include:</p>
+<ul>
+<li><p><strong>Parameterized Queries (Prepared Statements):</strong> This is the gold standard. You write a template of your SQL query with placeholders, and then provide the user input separately. The database engine treats the input as pure data, not as executable code. Every major programming language has built-in support for this.</p>
+</li>
+<li><p><strong>Input Validation:</strong> Validate all user input on the server side. Check the type (is it a number or a string?), length, format, and content. Use a whitelist approach: only allow known-good inputs.</p>
+</li>
+<li><p><strong>Escape Special Characters:</strong> If parameterized queries are not possible, escape special characters that have meaning in SQL (like single quotes) before including them in the query. However, this is less reliable than parameterized queries.</p>
+</li>
+<li><p><strong>Principle of Least Privilege:</strong> Ensure that database user accounts used by the application have only the minimum permissions they need to function. For example, a user account that only needs to read data should not have <code>DELETE</code> or <code>UPDATE</code> permissions.</p>
+</li>
+<li><p><strong>Web Application Firewall (WAF):</strong> A WAF can detect and block SQL injection attempts based on known attack patterns.</p>
+</li>
+</ul>
+<h2>7. Testing for SQL Injection</h2>
+<ul>
+<li><p><strong>Manual Testing:</strong> Try common payloads like <code>&#39;</code>, <code>&#39; OR &#39;1&#39;=&#39;1</code>, <code>UNION SELECT</code>, etc., in different input fields.</p>
+</li>
+<li><p><strong>Automated Scanning:</strong> Tools like Burp Suite and OWASP ZAP can automatically test for SQLi.</p>
+</li>
+<li><p><strong>Code Review:</strong> Inspect the application code for any instances where user input is directly concatenated into SQL queries.</p>
+</li>
+</ul>
+<h2>8. Defense-in-Depth</h2>
+<p>Always practice defense-in-depth by using strict input validation and applying the Principle of Least Privilege (where database user accounts have only the minimum permissions they need to function).</p>

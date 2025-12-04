@@ -1,0 +1,136 @@
+---
+id: network-traffic-analysis
+title: Network Traffic Analysis (NTA)
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>Network Traffic Analysis (NTA)</h1>
+<p>Network Traffic Analysis is the practice of capturing, inspecting, and analyzing data flow across a network to provide crucial visibility into real-time network activity.</p>
+<h2>Fundamentals and Purpose</h2>
+<p><strong>Definition:</strong> The practice of capturing, inspecting, and analyzing data flow across a network. Provides crucial visibility into real-time network activity.</p>
+<p><strong>Key Goals:</strong></p>
+<ul>
+<li><strong>Baseline Establishment:</strong> Defining &quot;normal&quot; traffic patterns to quickly identify anomalies.</li>
+<li><strong>Threat Hunting:</strong> Detecting command-and-control (C2) communication, malware, or data exfiltration.</li>
+<li><strong>Diagnosis:</strong> Troubleshooting latency, failures, and protocol errors.</li>
+</ul>
+<h2>The OSI Model: Conceptual Framework</h2>
+<p>The Open Systems Interconnection (OSI) model divides network communication into seven layers, defining where specific protocols and data units reside.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Layer</th>
+<th align="center">Name</th>
+<th align="left">Function / Explanation</th>
+<th align="left">Common Protocols/Devices</th>
+<th align="left">PDU (Protocol Data Unit)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>7</strong></td>
+<td align="center"><strong>Application</strong></td>
+<td align="left">User interaction with the network; handles data access and services.</td>
+<td align="left">HTTP, FTP, SMTP</td>
+<td align="left">Data</td>
+</tr>
+<tr>
+<td align="center"><strong>6</strong></td>
+<td align="center"><strong>Presentation</strong></td>
+<td align="left">Data formatting, conversion, and encryption/decryption.</td>
+<td align="left">JPG, SSL, TLS</td>
+<td align="left">Data</td>
+</tr>
+<tr>
+<td align="center"><strong>5</strong></td>
+<td align="center"><strong>Session</strong></td>
+<td align="left">Establishes, manages, and terminates connections between applications.</td>
+<td align="left">NetBIOS</td>
+<td align="left">Data</td>
+</tr>
+<tr>
+<td align="center"><strong>4</strong></td>
+<td align="center"><strong>Transport</strong></td>
+<td align="left">Manages end-to-end communication; provides reliability (TCP) or speed (UDP).</td>
+<td align="left">TCP, UDP</td>
+<td align="left">Segment/Datagram</td>
+</tr>
+<tr>
+<td align="center"><strong>3</strong></td>
+<td align="center"><strong>Network</strong></td>
+<td align="left">Handles logical addressing (IP) and routing decisions across networks.</td>
+<td align="left">IP, Routers, L3 Switches</td>
+<td align="left">Packet</td>
+</tr>
+<tr>
+<td align="center"><strong>2</strong></td>
+<td align="center"><strong>Data Link</strong></td>
+<td align="left">Provides physical addressing (MAC) and controls access to the shared media.</td>
+<td align="left">Ethernet, Switches</td>
+<td align="left">Frame</td>
+</tr>
+<tr>
+<td align="center"><strong>1</strong></td>
+<td align="center"><strong>Physical</strong></td>
+<td align="left">Transmits raw binary bits over the physical medium (cables, wireless).</td>
+<td align="left">Network Cards, Cabling</td>
+<td align="left">Bit</td>
+</tr>
+</tbody></table>
+<h2>Analysis Tools and Techniques</h2>
+<p><strong>Wireshark:</strong> The standard, open-source tool for deep packet inspection.</p>
+<p><strong>Filtering:</strong></p>
+<ul>
+<li><strong>Capture Filters:</strong> Applied <strong>before</strong> capture to reduce file size (e.g., <code>host 192.168.1.1</code>).</li>
+<li><strong>Display Filters:</strong> Applied <strong>after</strong> capture to selectively view captured data (e.g., <code>http.request</code>).</li>
+</ul>
+<p><strong>TCP Stream Following:</strong> Allows analysts to reassemble the entire conversation (e.g., a file transfer or web session) from fragmented packets into a single, readable stream.</p>

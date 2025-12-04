@@ -1,0 +1,63 @@
+---
+id: observability-and-logging
+title: Observability and Logging
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<p>Observability helps you understand what your system is doing in production. This topic discusses structured logging, distributed tracing, metrics, and how to use tools like Prometheus, Grafana, and OpenTelemetry to build an observable system.</p>
+<p>Practical items:</p>
+<ul>
+<li>Use structured logs (JSON) with correlation IDs.</li>
+<li>Capture traces for slow requests and background jobs.</li>
+<li>Create dashboards for key SLOs and alerts.</li>
+</ul>

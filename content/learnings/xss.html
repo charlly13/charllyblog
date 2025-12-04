@@ -1,0 +1,148 @@
+---
+id: xss
+title: Cross-Site Scripting (XSS)
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>Cross-Site Scripting (XSS) (CWE-79): A Detailed Guide</h1>
+<p>This guide explains Cross-Site Scripting (XSS), a widespread web security vulnerability that allows attackers to compromise the interactions users have with a vulnerable application. We will cover how it works, its different forms, and the best ways to stop it.</p>
+<h2>1. What is Cross-Site Scripting (XSS)?</h2>
+<p><strong>The Core Idea:</strong> XSS is a vulnerability that lets an attacker inject malicious scripts (usually JavaScript) into a web page viewed by other users. When an unsuspecting user visits the compromised page, their browser will execute the malicious script, believing it came from a trusted source.</p>
+<p>The root cause is the application&#39;s failure to properly handle user-supplied data. When a website takes input from a user (like a name, a comment, or a search term) and displays it back on a page without cleaning or &quot;neutralizing&quot; it first, an attacker can supply a script instead of normal text.</p>
+<p><strong>The Goal:</strong> The ultimate goal for the attacker is to bypass the <strong>Same-Origin Policy (SOP)</strong>. The SOP is a critical security rule in web browsers that prevents a script from one website (e.g., <code>evil.com</code>) from accessing data on another website (e.g., <code>your-bank.com</code>). By injecting a script directly into <code>your-bank.com</code>, the attacker&#39;s code runs with the same permissions as the legitimate website, allowing it to access the user&#39;s sensitive data for that site.</p>
+<h2>2. How Does XSS Work?</h2>
+<p>The attack follows a simple but effective pattern:</p>
+<ol>
+<li><p><strong>Injection:</strong> The attacker finds a part of a website that accepts user input and displays it back, such as a search bar or a comments section. Instead of regular text, they submit a malicious script.</p>
+</li>
+<li><p><strong>Delivery:</strong> The vulnerable website saves this malicious input and includes it in the HTML of the web page without sanitizing it.</p>
+</li>
+<li><p><strong>Execution:</strong> When a victim visits this page, their web browser receives the HTML, sees the malicious script, and executes it because it trusts the source (the vulnerable website).</p>
+</li>
+</ol>
+<p><strong>A Simple Analogy (The Public Message Board):</strong></p>
+<ul>
+<li><p><strong>The Website:</strong> A public message board where people can post comments for others to see.</p>
+</li>
+<li><p><strong>The Attacker (Mallory):</strong> Instead of posting a text message like &quot;Hello!&quot;, Mallory posts a comment that is actually a script: <code>&lt;script&gt;alert(&#39;You have been hacked!&#39;)&lt;/script&gt;</code>.</p>
+</li>
+<li><p><strong>The Vulnerability:</strong> The message board website doesn&#39;t check the content of the post. It just saves it and displays it to everyone.</p>
+</li>
+<li><p><strong>The Victim (Alice):</strong> When Alice visits the message board, her browser loads all the comments. When it gets to Mallory&#39;s post, it doesn&#39;t display the text <code>&lt;script&gt;...</code>—it sees a command and executes the script, causing a popup to appear on Alice&#39;s screen.</p>
+</li>
+</ul>
+<h2>3. The Three Main Types of XSS Attacks</h2>
+<p>XSS vulnerabilities are categorized based on how the malicious script is delivered to the victim&#39;s browser.</p>
+<h3>a. Reflected XSS (Non-Persistent)</h3>
+<p>This is the most common type. The injected script is &quot;reflected&quot; off the web server and sent to the victim.</p>
+<ul>
+<li><p><strong>How it Works:</strong> The malicious script is part of the URL or another request parameter. The attacker must trick the victim into clicking a specially crafted link (e.g., through a phishing email). When the victim clicks the link, the script is sent to the vulnerable server, which then includes it in the web page it sends back to the victim&#39;s browser. The script is never permanently stored on the server.</p>
+</li>
+<li><p><strong>Example:</strong> A search page displays the search term. The URL is <code>https://example.com/search?term=apples</code>. An attacker crafts a URL like: <code>https://example.com/search?term=&lt;script&gt;steal_cookie()&lt;/script&gt;</code>. When a victim clicks this, the page will display the script, and the browser will run it.</p>
+</li>
+</ul>
+<h3>b. Stored XSS (Persistent)</h3>
+<p>This is the most dangerous type because it can affect many users without any direct interaction.</p>
+<ul>
+<li><p><strong>How it Works:</strong> The attacker injects the malicious script, and the vulnerable application permanently stores it on the server (e.g., in a database, as a blog comment, or in a user&#39;s profile name). Every time any user visits the page containing this stored data, the server sends the script to their browser, which then executes it.</p>
+</li>
+<li><p><strong>Example:</strong> An attacker posts a comment on a blog. The comment is a malicious script. The blog&#39;s server saves this comment to its database. Now, every person who views that blog post will have their browser execute the attacker&#39;s script.</p>
+</li>
+</ul>
+<h3>c. DOM-based XSS</h3>
+<p>This is a more modern and subtle variant where the entire attack happens in the victim&#39;s browser. The server is not directly involved in the vulnerability.</p>
+<ul>
+<li><p><strong>How it Works:</strong> The vulnerability lies in the website&#39;s client-side JavaScript code. The code takes data from a source controlled by the user (like the part of the URL after the <code>#</code> symbol) and dynamically writes it into the page&#39;s HTML without sanitizing it. The server never even sees the malicious payload.</p>
+</li>
+<li><p><strong>Example:</strong> A website has a feature where it shows your name in the page based on the URL: <code>https://example.com/hello#Alice</code>. The JavaScript code does something like: <code>document.getElementById(&#39;greeting&#39;).innerHTML = &#39;Hello, &#39; + location.hash;</code> If an attacker changes the URL to <code>https://example.com/hello#&lt;script&gt;steal_cookie()&lt;/script&gt;</code>, the script will be executed.</p>
+</li>
+</ul>
+<h2>4. Why XSS is Dangerous</h2>
+<p>The consequences of a successful XSS attack can be severe:</p>
+<ul>
+<li><p><strong>Steal Session Cookies:</strong> An attacker can steal the cookies that store your login session, allowing them to impersonate you without knowing your password.</p>
+</li>
+<li><p><strong>Steal Sensitive Information:</strong> Scripts can access data on the page (like credit card numbers or personal information) and send it to the attacker&#39;s server.</p>
+</li>
+<li><p><strong>Redirect to Malicious Sites:</strong> The script can redirect you to a fake login page that looks real, tricking you into giving up your credentials.</p>
+</li>
+<li><p><strong>Perform Actions on Your Behalf:</strong> The script can use your authenticated session to make purchases, post messages, or change your account settings.</p>
+</li>
+<li><p><strong>Spread Malware:</strong> The script can download and install malware onto your computer.</p>
+</li>
+<li><p><strong>Deface the Website:</strong> The attacker can change what the page displays to all users.</p>
+</li>
+</ul>
+<h2>5. How to Prevent XSS</h2>
+<p>The most effective defenses include:</p>
+<ul>
+<li><p><strong>Output Encoding:</strong> When displaying user input, encode it so that any special characters (like <code>&lt;</code> and <code>&gt;</code>) are converted into harmless representations (like <code>&amp;lt;</code> and <code>&amp;gt;</code>). This prevents the browser from interpreting it as HTML or JavaScript.</p>
+</li>
+<li><p><strong>Input Validation:</strong> Validate user input on the server side. Check that it matches the expected format. For example, if a field should only contain numbers, reject anything else.</p>
+</li>
+<li><p><strong>Content Security Policy (CSP):</strong> This is a security header that you send with your web pages. It tells the browser which sources of scripts and other resources are trustworthy. For example, you can say, &quot;Only execute scripts that come from my own domain.&quot;</p>
+</li>
+<li><p><strong>HTML Sanitization Libraries:</strong> If you absolutely must allow users to enter HTML (e.g., for rich text editing), use a library that removes potentially dangerous tags and attributes while preserving safe formatting.</p>
+</li>
+<li><p><strong>HttpOnly Cookies:</strong> Set the <code>HttpOnly</code> flag on sensitive cookies. This prevents JavaScript from accessing them, so even if an XSS attack is successful, the attacker can&#39;t steal the session cookie.</p>
+</li>
+</ul>
+<h2>6. Testing for XSS</h2>
+<ul>
+<li><p><strong>Manual Testing:</strong> Try common payloads like <code>&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;</code>, <code>&lt;img src=x onerror=alert(&#39;XSS&#39;)&gt;</code>, etc., in different input fields.</p>
+</li>
+<li><p><strong>Automated Scanning:</strong> Tools like Burp Suite and OWASP ZAP can automatically test for XSS.</p>
+</li>
+<li><p><strong>Code Review:</strong> Inspect the application code for any instances where user input is directly included in HTML output without encoding.</p>
+</li>
+</ul>

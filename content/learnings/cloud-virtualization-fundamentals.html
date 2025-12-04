@@ -1,0 +1,201 @@
+---
+id: cloud-virtualization-fundamentals
+title: Cloud & Virtualization Fundamentals
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>Cloud &amp; Virtualization Fundamentals: A Simple Guide</h1>
+<p>This guide breaks down the core concepts of cloud computing and virtualization, explaining the technology that powers much of the modern internet.</p>
+<h2>1. Virtualization: Creating Virtual Computers</h2>
+<p>At the heart of cloud computing is <strong>virtualization</strong>.</p>
+<ul>
+<li><p><strong>What it is:</strong> Virtualization is the process of creating a virtual, or &quot;pretend,&quot; version of something, like a computer, a server, or a storage device. It allows you to run multiple operating systems and applications on a single physical machine.</p>
+</li>
+<li><p><strong>The Key Tool: The Hypervisor</strong></p>
+<ul>
+<li>A <strong>hypervisor</strong> is specialized software that creates and manages virtual machines (VMs).</li>
+<li>A VM is a complete, self-contained computer that runs inside another computer. It has its own virtual CPU, memory, and storage, but it&#39;s all just a clever division of the physical hardware&#39;s resources.</li>
+</ul>
+</li>
+</ul>
+<h3>Two Types of Hypervisors</h3>
+<p>There are two main kinds of hypervisors, and the difference is where they are installed.</p>
+<h4>a. Type 1: Native (or &quot;Bare-Metal&quot;) Hypervisor</h4>
+<ul>
+<li><p><strong>How it works:</strong> This hypervisor is installed <strong>directly onto the physical hardware</strong> of the computer, just like a regular operating system. The VMs then run on top of the hypervisor.</p>
+</li>
+<li><p><strong>Analogy:</strong> A Type 1 hypervisor is like building a house directly on a solid foundation (the hardware). It&#39;s very efficient and stable.</p>
+</li>
+<li><p><strong>Where it&#39;s used:</strong> This is the standard for businesses and data centers because it&#39;s fast and powerful.</p>
+</li>
+<li><p><strong>Examples:</strong> VMware vSphere/ESXi, Microsoft Hyper-V.</p>
+</li>
+</ul>
+<h4>b. Type 2: Hosted Hypervisor</h4>
+<ul>
+<li><p><strong>How it works:</strong> This hypervisor runs as an <strong>application on top of an existing operating system</strong> (like Windows or macOS). You install it just like any other program.</p>
+</li>
+<li><p><strong>Analogy:</strong> A Type 2 hypervisor is like running an app on your phone or computer. The app (the hypervisor) creates and manages the VMs inside it.</p>
+</li>
+<li><p><strong>Where it&#39;s used:</strong> Perfect for individual users, developers, and for testing purposes, like running a Linux virtual machine on your Windows laptop.</p>
+</li>
+<li><p><strong>Examples:</strong> Oracle VirtualBox, VMware Workstation.</p>
+</li>
+</ul>
+<h2>2. Cloud Storage: Your Files on the Internet</h2>
+<p>Cloud storage is a model where you store your data on remote servers that you access through the internet. It&#39;s like having a digital storage locker.</p>
+<h3>Three Varieties of Cloud Storage</h3>
+<h4>a. Cloud Storage Applications</h4>
+<ul>
+<li><p><strong>What they are:</strong> These are services that give you space on their servers to store your files.</p>
+</li>
+<li><p><strong>How they work:</strong> You upload your files, and the service takes care of storing and securing them. You can then access these files from any device with an internet connection.</p>
+</li>
+<li><p><strong>Example:</strong> <strong>Google Drive</strong>, <strong>Dropbox</strong>, and <strong>Microsoft OneDrive</strong>. You can open a document on your laptop, make changes, and then see those same changes on your phone because the file lives in the cloud.</p>
+</li>
+</ul>
+<h4>b. File Synchronization</h4>
+<ul>
+<li><p><strong>What it is:</strong> This is the <em>process</em> that keeps your files identical across all your devices.</p>
+</li>
+<li><p><strong>How it works:</strong> Cloud storage apps create a special folder on your computer. Anything you put in that folder is automatically uploaded to the cloud. When you install the app on another device, it downloads the files to a similar folder, and any changes you make on one device are automatically synced to all the others.</p>
+</li>
+<li><p><strong>Example:</strong> You save a photo to your Dropbox folder on your PC. A few moments later, that same photo appears in the Dropbox app on your phone, ready to be viewed.</p>
+</li>
+</ul>
+<h4>c. Content Delivery Networks (CDNs)</h4>
+<ul>
+<li><p><strong>What they are:</strong> A CDN is a network of servers distributed all around the world. These servers store copies of website content, like images, videos, and code.</p>
+</li>
+<li><p><strong>How they work:</strong> When you visit a website that uses a CDN, your browser downloads the content from the server that is geographically closest to you.</p>
+</li>
+<li><p><strong>Why it&#39;s important:</strong> This dramatically reduces loading times. Instead of fetching a video from a server in California, a user in the Philippines can get it from a server in Singapore, making the website feel much faster.</p>
+</li>
+<li><p><strong>Example:</strong> <strong>Netflix</strong> and <strong>YouTube</strong> use CDNs to stream videos smoothly to millions of users worldwide.</p>
+</li>
+</ul>
+<h2>3. Cloud Deployment Models: How the Cloud is Built</h2>
+<p>A deployment model defines who owns the cloud infrastructure and who has access to it.</p>
+<h4>a. Public Cloud</h4>
+<ul>
+<li><p><strong>What it is:</strong> The cloud infrastructure is owned by a third-party provider (like Amazon, Google, or Microsoft) and is shared by many different organizations and users over the internet.</p>
+</li>
+<li><p><strong>Tenancy Model:</strong> This is a <strong>multitenant</strong> environment. Multiple customers (tenants) share the same physical hardware resources, but their data is kept logically separate and secure from each other.</p>
+</li>
+<li><p><strong>Pros:</strong> Very cost-effective. You pay only for what you use. No need to buy expensive servers upfront.</p>
+</li>
+<li><p><strong>Cons:</strong> Less control. The provider controls maintenance, updates, and security policies.</p>
+</li>
+<li><p><strong>Example:</strong> AWS, Google Cloud, Microsoft Azure.</p>
+</li>
+</ul>
+<h4>b. Private Cloud</h4>
+<ul>
+<li><p><strong>What it is:</strong> The cloud infrastructure is dedicated to a single organization. It can be hosted on the organization&#39;s own premises or by a third-party provider, but it&#39;s not shared with other organizations.</p>
+</li>
+<li><p><strong>Pros:</strong> More control and security. The organization can customize everything to its needs.</p>
+</li>
+<li><p><strong>Cons:</strong> More expensive. The organization has to pay for the entire infrastructure, even if it&#39;s not fully utilized.</p>
+</li>
+<li><p><strong>Example:</strong> A bank hosting its own cloud infrastructure in its data center.</p>
+</li>
+</ul>
+<h4>c. Hybrid Cloud</h4>
+<ul>
+<li><p><strong>What it is:</strong> A combination of public and private clouds. Some data and applications are kept on a private cloud, while others are in the public cloud.</p>
+</li>
+<li><p><strong>Pros:</strong> Flexibility. You can keep sensitive data private while using the public cloud&#39;s cost efficiency for less sensitive operations.</p>
+</li>
+<li><p><strong>Cons:</strong> More complex to manage.</p>
+</li>
+<li><p><strong>Example:</strong> A company keeps its financial records on a private cloud but uses AWS for its web-facing application.</p>
+</li>
+</ul>
+<h2>4. Cloud Computing Service Models</h2>
+<h3>a. Infrastructure as a Service (IaaS)</h3>
+<ul>
+<li><p><strong>What it is:</strong> You rent raw computing resources (servers, storage, networking) from the cloud provider. You manage the operating system, middleware, and applications yourself.</p>
+</li>
+<li><p><strong>Analogy:</strong> It&#39;s like renting empty office space. You get the building, utilities, and internet connection, but you furnish it and decide what happens inside.</p>
+</li>
+<li><p><strong>Example:</strong> AWS EC2 (Elastic Compute Cloud) lets you rent virtual servers by the hour.</p>
+</li>
+</ul>
+<h3>b. Platform as a Service (PaaS)</h3>
+<ul>
+<li><p><strong>What it is:</strong> The cloud provider gives you a complete development and deployment environment in the cloud. You focus on developing your application; the provider handles the infrastructure and tools.</p>
+</li>
+<li><p><strong>Analogy:</strong> It&#39;s like renting a fully furnished office. Everything is set up for you to start working immediately.</p>
+</li>
+<li><p><strong>Example:</strong> Google App Engine allows developers to build and deploy applications without managing the underlying servers.</p>
+</li>
+</ul>
+<h3>c. Software as a Service (SaaS)</h3>
+<ul>
+<li><p><strong>What it is:</strong> The cloud provider hosts and manages the entire application. You just use it through a web browser. No installation required.</p>
+</li>
+<li><p><strong>Analogy:</strong> It&#39;s like using a service you can access anywhere. You don&#39;t own the office; you just show up and use it.</p>
+</li>
+<li><p><strong>Example:</strong> Gmail, Microsoft Office 365, Salesforce CRM.</p>
+</li>
+</ul>
+<h2>5. Security in the Cloud</h2>
+<p>Cloud security is a shared responsibility:</p>
+<ul>
+<li><p><strong>Provider&#39;s Responsibility:</strong> Securing the infrastructure, data centers, and networks.</p>
+</li>
+<li><p><strong>Your Responsibility:</strong> Securing your data, managing access controls, and using the service securely.</p>
+</li>
+<li><p><strong>Data Loss Prevention (DLP):</strong> Helps prevent sensitive data from being leaked or stolen by enforcing encryption and data loss prevention (DLP) policies.</p>
+</li>
+</ul>

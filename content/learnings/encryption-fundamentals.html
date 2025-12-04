@@ -1,0 +1,193 @@
+---
+id: encryption-fundamentals
+title: Encryption Fundamentals
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>Encryption Fundamentals: A Simple Guide</h1>
+<p>This guide breaks down the basics of encryption, turning complex ideas into simple, easy-to-understand concepts.</p>
+<h2>1. The Core Ideas of Cryptography (The Four Principles)</h2>
+<p>Cryptography is the science of keeping information secret and safe. Think of it as a set of rules for protecting your data. It&#39;s built on four main principles:</p>
+<h3>a. Encryption</h3>
+<ul>
+<li><p><strong>What it is:</strong> This is the process of scrambling a message so that only the right people can read it. It&#39;s like writing a letter in a secret code.</p>
+</li>
+<li><p><strong>Technical Term:</strong> The original readable message is called <strong>plaintext</strong>. The scrambled, unreadable message is called <strong>ciphertext</strong>.</p>
+</li>
+<li><p><strong>Example:</strong> You write &quot;HELLO&quot; (plaintext). Encryption turns it into &quot;XCVBN&quot; (ciphertext). Without the secret key, no one knows what &quot;XCVBN&quot; means.</p>
+</li>
+</ul>
+<h3>b. Authentication</h3>
+<ul>
+<li><p><strong>What it is:</strong> This is about proving you are who you say you are. It ensures that the person you&#39;re communicating with is the real deal and not an impostor.</p>
+</li>
+<li><p><strong>Example:</strong> When you log into your email, you enter a password. This is you authenticating yourself. The system verifies that it&#39;s really you.</p>
+</li>
+</ul>
+<h3>c. Integrity</h3>
+<ul>
+<li><p><strong>What it is:</strong> This ensures that the message has not been changed or tampered with along the way. The message you receive is the exact same one that was sent.</p>
+</li>
+<li><p><strong>Example:</strong> Imagine you send a bank transfer request for $100. Integrity ensures that a hacker can&#39;t change that amount to $1,000 without anyone noticing. The system would detect the change and flag it as invalid.</p>
+</li>
+</ul>
+<h3>d. Non-repudiation</h3>
+<ul>
+<li><p><strong>What it is:</strong> This means a sender cannot deny that they sent a message. It provides proof that the message came from them.</p>
+</li>
+<li><p><strong>Example:</strong> When you sign a contract with a digital signature, non-repudiation prevents you from later claiming, &quot;That wasn&#39;t me, I never signed it!&quot; The digital signature acts as undeniable proof.</p>
+</li>
+</ul>
+<h2>2. The Tools of Cryptography</h2>
+<p>Cryptography uses several tools to achieve its goals. Here are the most important ones:</p>
+<h3>a. Hash Functions</h3>
+<ul>
+<li><p><strong>What they do:</strong> A hash function takes an input (like a file or a password) and turns it into a unique, fixed-size string of characters. This string is called a <strong>hash</strong>.</p>
+</li>
+<li><p><strong>Key Features:</strong></p>
+<ul>
+<li><strong>One-Way:</strong> You can&#39;t reverse the process. There&#39;s no way to get the original input back from just the hash.</li>
+<li><strong>Unique:</strong> Even a tiny change in the input (like adding one letter) will create a completely different hash.</li>
+</ul>
+</li>
+<li><p><strong>How it&#39;s used:</strong></p>
+<ul>
+<li><strong>Password Storage:</strong> Websites don&#39;t store your actual password. They store the hash of your password. When you log in, they hash what you typed and compare it to the stored hash.</li>
+<li><strong>File Integrity:</strong> When you download a file, you can compare its hash to the one provided by the source. If they match, you know the file wasn&#39;t corrupted or altered during download.</li>
+</ul>
+</li>
+<li><p><strong>Common Examples:</strong> MD5, SHA-256</p>
+</li>
+</ul>
+<h3>b. Ciphers (How Encryption Happens)</h3>
+<p>A cipher is the specific algorithm or set of steps used to encrypt and decrypt data. There are two main types:</p>
+<h4>i. Symmetric Ciphers (One Key for Everything)</h4>
+<ul>
+<li><p><strong>How it works:</strong> Uses the <strong>same key</strong> for both encrypting and decrypting the message.</p>
+</li>
+<li><p><strong>Analogy:</strong> It&#39;s like having a single key that both locks and unlocks your front door. You and your friend need to have a copy of the same key to share a locked box.</p>
+</li>
+<li><p><strong>Challenge:</strong> You have to find a secure way to share the key in the first place. If someone intercepts the key, they can read all your messages.</p>
+</li>
+<li><p><strong>Example Algorithms &amp; Explanations:</strong></p>
+<ul>
+<li><strong>AES (Advanced Encryption Standard):</strong> The gold standard, used by governments and companies worldwide. Very secure and fast.</li>
+<li><strong>DES (Data Encryption Standard):</strong> An older standard that&#39;s now considered weak. Don&#39;t use it for new applications.</li>
+<li><strong>RC family (RC4, RC5, RC6):</strong> A series of ciphers developed by Ron Rivest (the &#39;R&#39; in RSA). RC4 was widely used but is now considered insecure. RC6 was another AES finalist known for good performance.</li>
+</ul>
+</li>
+</ul>
+<h4>ii. Asymmetric Ciphers (Two Different Keys)</h4>
+<ul>
+<li><p><strong>How it works:</strong> Uses a pair of keys: a <strong>public key</strong> and a <strong>private key</strong>.</p>
+<ul>
+<li><strong>Public Key:</strong> You share this with everyone. Anyone can use it to <em>encrypt</em> messages meant for you.</li>
+<li><strong>Private Key:</strong> You keep this a secret. It&#39;s the only key that can <em>decrypt</em> messages that were encrypted with your public key.</li>
+</ul>
+</li>
+<li><p><strong>Analogy:</strong> Think of your public key as a mailbox with a slot. Anyone can drop a letter (an encrypted message) into the slot. But only you have the private key to open the mailbox and read the letters.</p>
+</li>
+<li><p><strong>How it&#39;s used:</strong> This is great for secure communication without having to share a secret key beforehand. It&#39;s also the foundation for digital signatures.</p>
+</li>
+<li><p><strong>Example Algorithms &amp; Explanations:</strong></p>
+<ul>
+<li><strong>RSA (Rivest-Shamir-Adleman):</strong> One of the most widely used asymmetric algorithms. Named after its three inventors.</li>
+<li><strong>ECC (Elliptic Curve Cryptography):</strong> A newer alternative to RSA. It offers similar security with smaller key sizes, making it faster and more efficient.</li>
+<li><strong>Diffie-Hellman:</strong> While primarily known as a key exchange method, it is an asymmetric algorithm that allows two parties to securely establish a shared secret key over an insecure channel without anyone eavesdropping.</li>
+</ul>
+</li>
+</ul>
+<h3>c. Key Exchange Algorithms</h3>
+<ul>
+<li><p><strong>What it is:</strong> A secure method for two parties to agree on a shared secret key over an insecure channel (like the internet) without anyone eavesdropping.</p>
+</li>
+<li><p><strong>The Challenge:</strong> Imagine two people want to communicate secretly, but they&#39;re in a room full of spies. How do they agree on a secret code without the spies finding out?</p>
+</li>
+<li><p><strong>The Solution:</strong> The Diffie-Hellman Key Exchange lets them do exactly this. Through a series of mathematical operations, they can agree on a shared secret that only they know, even if someone is listening to every word they exchange.</p>
+</li>
+<li><p><strong>Why it&#39;s important:</strong> Modern secure connections (HTTPS) use key exchange to start the conversation. The two parties agree on a symmetric key using asymmetric techniques, and then they use that symmetric key to encrypt all further communication.</p>
+</li>
+</ul>
+<h2>3. Digital Signatures: Proving It&#39;s Really You</h2>
+<p>A <strong>digital signature</strong> is a cryptographic technique that proves:</p>
+<ul>
+<li>You sent the message (authentication).</li>
+<li>The message hasn&#39;t been changed (integrity).</li>
+<li>You can&#39;t deny sending it (non-repudiation).</li>
+</ul>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>You use your private key to &quot;sign&quot; a message. This creates a signature.</li>
+<li>Someone can verify the signature using your public key.</li>
+<li>If the signature is valid, they know the message came from you and hasn&#39;t been altered.</li>
+</ol>
+<p><strong>Real-world example:</strong> When you get a signed email from a bank, their digital signature proves it&#39;s really from them.</p>
+<h2>4. Certificates: The Trust Chain</h2>
+<p>A <strong>digital certificate</strong> is a document that says, &quot;I am who I claim to be.&quot; It&#39;s like a passport for the internet.</p>
+<ul>
+<li><p><strong>What it contains:</strong> Your public key, your name, and the name of the organization (Certificate Authority) that verified your identity.</p>
+</li>
+<li><p><strong>Who issues them:</strong> Certificate Authorities (CAs) are trusted organizations that verify identities and issue certificates. They&#39;re like the DMV of the internet.</p>
+</li>
+<li><p><strong>How it&#39;s used:</strong> When you visit an HTTPS website, the website sends you its certificate. Your browser checks if the certificate is valid (was it issued by a trusted CA? Has it expired?). If it&#39;s valid, you know you&#39;re talking to the real website, not a fake one.</p>
+</li>
+</ul>
+<h2>5. Putting It All Together: How HTTPS Works</h2>
+<p>When you visit a secure website (notice the green lock and &quot;https://&quot; in your browser):</p>
+<ol>
+<li><strong>Key Exchange:</strong> Your browser and the website use Diffie-Hellman (or similar) to agree on a symmetric key.</li>
+<li><strong>Encryption:</strong> All data sent between you and the website is encrypted using that symmetric key (usually with AES).</li>
+<li><strong>Authentication:</strong> The website sends you its digital certificate so you know you&#39;re talking to the real deal.</li>
+<li><strong>Integrity:</strong> Hash functions ensure no one tampered with the data in transit.</li>
+</ol>
+<p>This combination of techniques (symmetric + asymmetric + hashing + certificates) is what keeps the internet secure.</p>

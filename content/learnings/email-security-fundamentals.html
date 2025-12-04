@@ -1,0 +1,81 @@
+---
+id: email-security-fundamentals
+ntitle: Email Security Fundamentals
+---
+
+<style>
+.section {
+  margin-bottom: 2rem;
+}
+
+.subsection {
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+}
+
+.concept-box {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-left: 4px solid rgb(219, 39, 119);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 0.375rem;
+}
+
+.dark .concept-box {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+ul.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.nested-list > li {
+  margin-bottom: 0.5rem;
+}
+
+ul.nested-list > li::before {
+  content: "• ";
+  color: rgb(219, 39, 819);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+ul.nested-list ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  list-style: none;
+}
+
+ul.nested-list ul > li::before {
+  content: "◦ ";
+  color: rgb(219, 39, 819);
+  margin-right: 0.5rem;
+}
+</style>
+
+<h1>Email Security Fundamentals</h1>
+<h2>Email Transmission and Protocols</h2>
+<p><strong>SMTP (Simple Mail Transfer Protocol):</strong> The core protocol used by mail servers to send and relay email messages.</p>
+<p><strong>DNS &amp; MX Records:</strong> The sending mail server uses DNS to look up the recipient domain&#39;s <strong>MX (Mail Exchange) record</strong>, which directs the message to the correct destination mail server.</p>
+<h2>Core Security Principles (CIA Triad +)</h2>
+<p>Email security is designed to enforce the following:</p>
+<ul>
+<li><strong>Confidentiality:</strong> Ensuring only the intended recipient can read the message (via encryption).</li>
+<li><strong>Integrity:</strong> Guaranteeing the message has not been altered during transit (via digital signatures).</li>
+<li><strong>Authentication:</strong> Verifying the identity of the sender, preventing unauthorized impersonation.</li>
+<li><strong>Non-repudiation:</strong> Providing proof that the message was sent by the claimed party.</li>
+</ul>
+<h3>2.3. Encryption Standards</h3>
+<ul>
+<li><strong>S/MIME (Secure/Multipurpose Internet Mail Extensions):</strong> Enterprise-focused, relies on a centralized <strong>Public Key Infrastructure (PKI)</strong> and Certificate Authorities (CAs) to manage keys and identities.</li>
+<li><strong>OpenPGP (Pretty Good Privacy):</strong> Community-focused, relies on a decentralized <strong>&quot;Web of Trust&quot;</strong> model for key validation.</li>
+<li><strong>Key Exchange:</strong> Encryption is performed using the recipient&#39;s <strong>Public Key</strong> (shared), while decryption requires the recipient&#39;s <strong>Private Key</strong> (secret).</li>
+</ul>
+<h3>2.4. Authentication Protocols (Combating Spoofing)</h3>
+<p>These protocols are recorded in the email header and checked by the receiving server:</p>
+<ul>
+<li><strong>SPF (Sender Policy Framework):</strong> A DNS record that explicitly lists which IP addresses are authorized to send email for a domain.</li>
+<li><strong>DKIM (DomainKeys Identified Mail):</strong> Adds a cryptographic signature to the header, verifying the message integrity and confirming it originated from an authorized sender.</li>
+<li><strong>DMARC (Domain-based Message Authentication, Reporting, and Conformance):</strong> An organizational policy that dictates what the receiving server should do if both SPF and DKIM fail (e.g., reject, quarantine, or deliver).</li>
+</ul>
