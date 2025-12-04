@@ -1,10 +1,7 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function About() {
-  const profileImage = PlaceHolderImages.find(p => p.id === 'profile-pic');
-  
   return (
     <section id="about" className="w-full py-16 md:py-24 lg:py-32 bg-background">
       <div className="container grid items-center gap-8 px-4 md:px-6 lg:grid-cols-2 lg:gap-16">
@@ -20,16 +17,13 @@ export default function About() {
         <div className="flex justify-center">
           <Card className="w-full max-w-sm overflow-hidden rounded-lg shadow-lg">
             <CardContent className="p-0">
-              {profileImage && (
-                <Image
-                  src={profileImage.imageUrl}
-                  alt={profileImage.description}
-                  data-ai-hint={profileImage.imageHint}
-                  width={400}
-                  height={400}
-                  className="object-cover w-full h-full"
-                />
-              )}
+              <Image
+                src="/images/profile.jpg"
+                alt="Profile picture"
+                width={400}
+                height={400}
+                className="object-cover w-full h-full"
+              />
             </CardContent>
           </Card>
         </div>
